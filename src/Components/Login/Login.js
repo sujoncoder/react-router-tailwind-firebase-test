@@ -1,14 +1,37 @@
-import React from 'react';
 import { ImGoogle3 } from 'react-icons/im';
 import { BsFacebook } from 'react-icons/bs';
 import { GoMarkGithub } from 'react-icons/go';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import auth from '../Firebase/Firebase.init';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 
 const Login = () => {
+
+    const [
+        signInWithEmailAndPassword,
+        user,
+        loading,
+        error,
+      ] = useSignInWithEmailAndPassword(auth);
+
+      const location = useLocation();
+      const  from = location.state?.from?.pathname || "/";
+
     
     const handleSubmit = event => {
         event.preventDefault();
+        const email = event.target.email.value;
+        const password = event.target.password.value;
+        console.log(email,password);
+
+        signInWithEmailAndPassword(email,password);
     }
+
+    const navigate = useNavigate();
+    if (user){
+        navigate(from, { replace: true });
+    };
+
     return (
         <div className='flex justify-center'>
 
@@ -16,9 +39,9 @@ const Login = () => {
 
                 <h1 className='text-center text-2xl font-bold text-orange-300'>Please login!</h1><br />
 
-                <input className='pl-5 text-blue-300 font-semibold border w-80 h-10 rounded border-gray-200 shadow hover:border-gray-400' type="email" placeholder='Enter your email'/><br /><br />
+                <input className='pl-5 text-blue-300 font-semibold border w-80 h-10 rounded border-gray-200 shadow hover:border-gray-400' type="email" name='email' placeholder='Enter your email'/><br /><br />
 
-                <input className='pl-5 text-blue-300 font-semibold border w-80 h-10 rounded border-gray-200 shadow hover:border-gray-400' type="password" placeholder='Enter your password'/><br /><br />
+                <input className='pl-5 text-blue-300 font-semibold border w-80 h-10 rounded border-gray-200 shadow hover:border-gray-400' type="password" name='password' placeholder='Enter your password'/><br /><br />
 
                 <div className='flex justify-center border rounded-lg bg-slate-200 hover:bg-slate-300 py-1 text-lg text-gray-700 cursor-pointer'>
                 <input className='cursor-pointer font-medium' type="submit" value="Login" />

@@ -7,6 +7,7 @@ import Sectret from "./Components/Secret/Sectret";
 import Login from "./Components/Login/Login";
 import Register from "./Components/Register/Register";
 import NotFound from "./Components/NotFounf/NotFound";
+import RequireAuth from "./Components/Login/RequireAuth";
 
 
 function App() {
@@ -18,7 +19,11 @@ function App() {
         <Route path="/home" element={<Home/>}/>
         <Route path="/about" element={<About/>}/>
         <Route path="/blog" element={<Blog/>}/>
-        <Route path="/secret" element={<Sectret/>}/>
+        <Route path="/secret" element={
+          <RequireAuth>
+            <Sectret/>
+          </RequireAuth>
+        }/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="*" element={<NotFound/>}/>
